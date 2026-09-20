@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Universidad de Guayaquil — Servicio en Línea</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+    body {
+      background: linear-gradient(135deg, #002F6C 0%, #0056B9 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    /* LOGIN */
+    .pantalla-login {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .caja-login {
+      background: white; border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      width: 100%; max-width: 420px; overflow: hidden;
+    }
+    .cabecera-login {
+      background: linear-gradient(90deg, #002F6C 0%, #0056B9 100%);
+      color: white; padding: 25px; text-align: center;
+    }
+    .cabecera-login h1 { font-size: 24px; margin-bottom: 5px; }
+    .cuerpo-login { padding: 35px 25px; }
+    .grupo-input { margin-bottom: 20px; }
+    .grupo-input label {
+      display: block; font-size: 14px; color: #002F6C;
+      font-weight: bold; margin-bottom: 8px;
+    }
+    .entrada {
+      width: 100%; padding: 14px 16px;
+      border: 2px solid #ddd; border-radius: 6px; font-size: 16px;
+    }
+    .entrada:focus { outline: none; border-color: #002F6C; }
+    .boton-ingresar {
+      width: 100%; background: #002F6C; color: white;
+      border: none; padding: 15px; font-size: 18px;
+      font-weight: bold; border-radius: 6px; cursor: pointer;
+    }
+    .mensaje {
+      margin-top: 20px; text-align: center; display: none;
+      padding: 10px; border-radius: 6px;
+    }
+    .error { background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
+
+    /* PANTALLA INTERMEDIA */
+    .pantalla-acceso {
+      display: none; justify-content: center; align-items: center;
+      min-height: 100vh; position: fixed; top: 0; left: 0;
+      width: 100%; background: rgba(0, 47, 108, 0.95); z-index: 100;
+    }
+    .caja-acceso {
+      background: white; border-radius: 12px; padding: 40px 30px;
+      text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      animation: aparecer 0.4s ease-out;
+    }
+    @keyframes aparecer {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .caja-acceso h2 { color: #002F6C; font-size: 24px; margin-bottom: 10px; }
+    .caja-acceso p { color: #555; font-size: 15px; margin-bottom: 25px; }
+    .cargando {
+      display: inline-block; width: 40px; height: 40px;
+      border: 4px solid #ddd; border-top-color: #002F6C;
+      border-radius: 50%; animation: girar 1s linear infinite;
+    }
+    @keyframes girar { to { transform: rotate(360deg); } }
+
+    /* CREDENCIAL */
+    .pantalla-credencial {
+      display: none; max-width: 650px; margin: 0 auto;
+      animation: aparecer 0.5s ease-out;
+    }
+    .credencial {
+      background: #fff; border: 3px solid #002F6C;
+      border-radius: 12px; overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0,47,108,0.25);
+    }
+    .cabecera-cred {
+      background: linear-gradient(90deg, #002F6C 0%, #0056B9 100%);
+      color: white; padding: 30px 25px; text-align: center;
+    }
+    .cabecera-cred h1 { font-size: 28px; font-weight: bold; margin-bottom: 8px; }
+    .cabecera-cred p { font-size: 16px; opacity: 0.9; }
+    .cuerpo-cred { padding: 30px 25px; display: flex; gap: 25px; }
+
+    /* === TU FOTO — NOMBRE CORRECTO === */
+    .foto-caja {
+      width: 180px; height: 220px; border: 2px solid #002F6C;
+      border-radius: 8px; background: #f5f5f5; flex-shrink: 0; overflow: hidden;
+    }
+    .foto-imagen {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center top;
+    }
+
+    .datos { flex: 1; display: flex; flex-direction: column; gap: 14px; }
+    .fila label {
+      font-size: 13px; color: #002F6C; font-weight: bold;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .fila span {
+      font-size: 16px; color: #222; margin-top: 4px;
+      border-bottom: 1px solid #ddd; padding-bottom: 6px; display: block;
+    }
+    .pie-cred {
+      background: #002F6C; color: white; padding: 18px 25px;
+      display: flex; justify-content: space-between;
+      align-items: center; flex-wrap: wrap; gap: 12px;
+    }
+    .codigo {
+      background: white; color: #002F6C; padding: 10px 15px;
+      border-radius: 6px; font-weight: bold;
+    }
+    .nota { margin-top: 15px; font-size: 12px; color: white; text-align: center; }
+    .boton-salir { margin-top: 20px; text-align: center; }
+    .boton-salir button {
+      background: transparent; border: 2px solid white; color: white;
+      padding: 10px 25px; border-radius: 6px; cursor: pointer; font-size: 15px;
+    }
+    @media (max-width: 520px) {
+      .cuerpo-cred { flex-direction: column; align-items: center; }
+      .datos { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOGIN -->
+  <div class="pantalla-login" id="pantallaLogin">
+    <div class="caja-login">
+      <div class="cabecera-login">
+        <h1>UNIVERSIDAD DE GUAYAQUIL</h1>
+        <p>Servicio en Línea Estudiantil</p>
+      </div>
+      <div class="cuerpo-login">
+        <form onsubmit="verificarDatos(event)">
+          <div class="grupo-input">
+            <label for="usuario">Usuario</label>
+            <input type="text" id="usuario" class="entrada" placeholder="Ingresa tu usuario" required>
+          </div>
+          <div class="grupo-input">
+            <label for="clave">Contraseña</label>
+            <input type="password" id="clave" class="entrada" placeholder="Ingresa tu contraseña" required>
+          </div>
+          <button type="submit" class="boton-ingresar">INGRESAR</button>
+        </form>
+        <div id="caja-mensaje" class="mensaje error"></div>
+        <p class="nota">P</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANTALLA INTERMEDIA -->
+  <div class="pantalla-acceso" id="pantallaAcceso">
+    <div class="caja-acceso">
+      <h2>Acceso a credenciales</h2>
+      <p>Verificando datos... un momento por favor</p>
+      <div class="cargando">Acceso a Credencial digital UG</div>
+    </div>
+  </div>
+
+  <!-- CREDENCIAL -->
+  <div class="pantalla-credencial" id="pantallaCredencial">
+    <div class="credencial">
+      <div class="cabecera-cred">
+        <h1>UNIVERSIDAD DE GUAYAQUIL</h1>
+        <p>CARNÉ ESTUDIANTIL DIGITAL</p>
+      </div>
+
+      <div class="cuerpo-cred">
+        <div class="foto-caja">
+          <!-- ✅ NOMBRE EXACTO DE TU ARCHIVO -->
+          <img src="Estudiante.jpg" class="foto-imagen" alt="Foto del estudiante">
+        </div>
+
+        <div class="datos">
+          <div class="fila">
+            <label>Apellidos y Nombres</label>
+            <span>CRISTHIAN JOSE TAPIAS CHAVARRIA</span>
+          </div>
+          <div class="fila">
+            <label>Cédula / Pasaporte</label>
+            <span>0952102127</span>
+          </div>
+          <div class="fila">
+            <label>Facultad</label>
+            <span>Ciencias Administrativas</span>
+          </div>
+          <div class="fila">
+            <label>Carrera</label>
+            <span>Ingeniería en Gestión Empresarial</span>
+          </div>
+          <div class="fila">
+            <label>Semestre / Nivel</label>
+            <span>3er Semestre</span>
+          </div>
+          <div class="fila">
+            <label>Período Académico</label>
+            <span>2026 - 2027</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pie-cred">
+        <div>
+          <p>Documento de identificación estudiantil</p>
+          <p>Válido para servicios académicos y campus</p>
+        </div>
+        <div class="codigo">UG-0952102127</div>
+      </div>
+    </div>
+
+    <div class="boton-salir">
+      <button onclick="cerrarSesion()">Cerrar Sesión</button>
+    </div>
+    <p class="nota">Credencial digital UG</p>
+  </div>
+
+<script>
+  const credenciales = {
+    usuario: "josetapias",
+    contrasena: "Mamita2021@123"
+  };
+
+  function verificarDatos(evento) {
+    evento.preventDefault();
+    const usu = document.getElementById("usuario").value.trim();
+    const cla = document.getElementById("clave").value;
+    const msg = document.getElementById("caja-mensaje");
+
+    if (usu === credenciales.usuario && cla === credenciales.contrasena) {
+      msg.style.display = "none";
+      document.getElementById("pantallaLogin").style.display = "none";
+      document.getElementById("pantallaAcceso").style.display = "flex";
+      setTimeout(() => {
+        document.getElementById("pantallaAcceso").style.display = "none";
+        document.getElementById("pantallaCredencial").style.display = "block";
+      }, 2000);
+    } else {
+      msg.textContent = "❌ Usuario o contraseña incorrectos.";
+      msg.style.display = "block";
+    }
+  }
+
+  function cerrarSesion() {
+    document.getElementById("pantallaCredencial").style.display = "none";
+    document.getElementById("pantallaLogin").style.display = "flex";
+    document.getElementById("usuario").value = "";
+    document.getElementById("clave").value = "";
+    document.getElementById("caja-mensaje").style.display = "none";
+  }
+</script>
+
+</body>
+</html>
