@@ -1,0 +1,2 @@
+# CredencialUG
+UNIVERSIDAD DE GUAYAQUIL
